@@ -172,7 +172,23 @@ def check_compliance_requirements(industry: str, company_size: str) -> str:
     )
 
 
-TOOLS = [search_legal_database, calculate_penalty, check_compliance_requirements]
+@tool
+def search_case_law(case_name: str) -> str:
+    """Search for detailed information about specific legal cases or precedents.
+
+    Args:
+        case_name: The name of the legal case (e.g., 'Griggs v. Duke Power Co.', 'Hadley v. Baxendale').
+    """
+    cases = {
+        "Griggs v. Duke Power Co.": "A 1971 Supreme Court case establishing the 'disparate impact' theory under Title VII.",
+        "Hadley v. Baxendale": "A landmark 1854 English case establishing the rule for consequential damages in contract law.",
+        "Winter v. NRDC": "A 2008 Supreme Court case clarifying the standard for granting preliminary injunctions.",
+        "U.S. v. Miller": "Relates to tax evasion and the definition of willful violations under federal law."
+    }
+    return cases.get(case_name, f"No detailed case summary found for {case_name}.")
+
+
+TOOLS = [search_legal_database, calculate_penalty, check_compliance_requirements, search_case_law]
 
 QUESTION = (
     "A tech startup with $5M revenue was caught sharing user data without consent "
@@ -180,10 +196,11 @@ QUESTION = (
 )
 
 SYSTEM_PROMPT = (
-    "You are a legal analyst agent. You have access to tools for searching legal databases, "
-    "calculating penalties, and checking compliance requirements. Use these tools to build "
-    "a comprehensive analysis. Search for each legal area separately — data privacy, tax, "
-    "and compliance. Keep your final answer under 500 words."
+    "You are a professional legal analyst. You must provide a DETAILED analysis. "
+    "When you use the penalty calculator, you MUST include the specific dollar amounts "
+    "in your final answer. Break down your answer into sections: Privacy, Tax, and Compliance. "
+    "Search for each legal area separately to ensure accuracy. If any famous cases are "
+    "mentioned, search for them to provide context."
 )
 
 
@@ -212,20 +229,18 @@ async def main():
     step = 0
     async for chunk in graph.astream(inputs, stream_mode="updates"):
         for node_name, update in chunk.items():
-            step += 1
             messages = update.get("messages", [])
             for msg in messages:
                 if hasattr(msg, "tool_calls") and msg.tool_calls:
-                    print(f"\n[Step {step}] THINK + ACT (node: {node_name})")
+                    print(f"\n[AGENT] THINKING: Deciding next steps...")
                     for tc in msg.tool_calls:
-                        print(f"  Tool: {tc['name']}")
-                        print(f"  Args: {tc['args']}")
+                        print(f"  -> Action: {tc['name']}({tc['args']})")
                 elif msg.type == "tool":
-                    print(f"\n[Step {step}] OBSERVE (node: {node_name})")
-                    content = msg.content
-                    print(f"  Result: {content[:300]}{'...' if len(content) > 300 else ''}")
+                    print(f"[TOOL RESULT] {msg.name}:")
+                    print(f"  {msg.content[:300]}...")
                 elif msg.type == "ai" and msg.content:
-                    print(f"\n[Step {step}] FINAL ANSWER (node: {node_name})")
+                    print(f"\n" + "="*70)
+                    print("FINAL DETAILED ANALYSIS:")
                     print("-" * 70)
                     print(msg.content)
 

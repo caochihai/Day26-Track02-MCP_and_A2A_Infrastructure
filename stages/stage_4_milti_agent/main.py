@@ -234,6 +234,14 @@ async def call_compliance_specialist(state: LegalState) -> dict:
     print(f"  [Node: call_compliance_specialist] Done ({len(final_msg)} chars)")
     return {"compliance_result": final_msg}
 
+async def call_privacy_specialist(state: LegalState) -> dict:
+    """Privacy specialist sub-agent (GDPR/CCPA)."""
+    print("\n  [Node: call_privacy_specialist] Privacy agent starting...")
+    llm = get_llm()
+    prompt = "You are a privacy law expert (GDPR, CCPA). Analyze the data privacy aspects of the question."
+    result = await llm.ainvoke([SystemMessage(content=prompt), HumanMessage(content=state["question"])])
+    return {"compliance_result": state.get("compliance_result", "") + "\n\nPRIVACY ANALYSIS:\n" + result.content}
+
 
 async def aggregate(state: LegalState) -> dict:
     """Combine all specialist analyses into a final comprehensive answer."""

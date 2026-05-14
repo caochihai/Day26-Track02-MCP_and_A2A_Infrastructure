@@ -81,6 +81,79 @@ LEGAL_KNOWLEDGE = [
             "public interest (Winter v. Natural Resources Defense Council, 2008)."
         ),
     },
+    {
+        "id": "wrongful_termination",
+        "keywords": ["wrongful", "termination", "fired", "dismissal", "employment", "at-will"],
+        "text": (
+            "Wrongful termination occurs when an employee is fired in violation of federal or state law, "
+            "public policy, or an implied/express contract. Under at-will employment doctrine (default in "
+            "most U.S. states), employers may terminate for any reason except: (1) discrimination based on "
+            "protected characteristics (Title VII, 42 U.S.C. § 2000e); (2) retaliation for protected "
+            "activities (NLRA § 7, FLSA § 215(a)(3)); (3) violation of implied good faith and fair dealing "
+            "covenant (recognized in ~11 states); (4) public policy exceptions (e.g., firing for jury duty, "
+            "whistleblowing). Remedies include reinstatement, back pay, front pay, compensatory and punitive damages."
+        ),
+    },
+    {
+        "id": "wage_hour_flsa",
+        "keywords": ["wage", "overtime", "flsa", "minimum wage", "hours", "pay", "salary"],
+        "text": (
+            "The Fair Labor Standards Act (FLSA, 29 U.S.C. § 201 et seq.) establishes federal minimum wage "
+            "($7.25/hr as of 2009, many states higher), overtime pay at 1.5x regular rate for hours exceeding "
+            "40/week, and child labor standards. Key provisions: (1) exemptions for executive, administrative, "
+            "professional, and outside sales employees (EAP exemptions) require salary ≥ $684/week; "
+            "(2) misclassification of employees as independent contractors may trigger back pay liability; "
+            "(3) statute of limitations is 2 years (3 years for willful violations); (4) collective/class "
+            "actions allowed under § 216(b); (5) penalties include back wages, equal amount in liquidated "
+            "damages, and attorney's fees."
+        ),
+    },
+    {
+        "id": "workplace_discrimination",
+        "keywords": ["discrimination", "title vii", "protected class", "race", "gender", "religion", "harassment", "eeoc"],
+        "text": (
+            "Federal anti-discrimination law prohibits employment discrimination based on protected "
+            "characteristics. Title VII of the Civil Rights Act (1964) covers race, color, religion, sex, "
+            "and national origin. Additional protections: Age Discrimination in Employment Act (ADEA, 29 U.S.C. "
+            "§ 621) for workers 40+; Americans with Disabilities Act (ADA, 42 U.S.C. § 12101) for qualified "
+            "individuals with disabilities; Pregnant Workers Fairness Act (2023) for pregnancy accommodations. "
+            "Claims require EEOC charge filing before litigation. Theories of liability include disparate "
+            "treatment (intentional), disparate impact (neutral policy with discriminatory effect, Griggs v. "
+            "Duke Power Co., 1971), and hostile work environment. Compensatory and punitive damages capped by "
+            "employer size (15–500 employees: $50,000–$300,000 per § 1981a)."
+        ),
+    },
+    {
+        "id": "fmla_leave",
+        "keywords": ["fmla", "family leave", "medical leave", "leave", "maternity", "paternity", "disability"],
+        "text": (
+            "The Family and Medical Leave Act (FMLA, 29 U.S.C. § 2601) entitles eligible employees of covered "
+            "employers (50+ employees) to up to 12 weeks of unpaid, job-protected leave per year for: "
+            "(1) birth, adoption, or foster placement of a child; (2) serious health condition of employee or "
+            "immediate family member; (3) qualifying military exigencies. Eligibility requires 12 months of "
+            "employment and 1,250 hours worked in the prior year. Employers must: maintain group health "
+            "benefits during leave; restore employee to same or equivalent position upon return. FMLA "
+            "interference or retaliation is prohibited under § 2615. Statute of limitations is 2 years "
+            "(3 years for willful violations). Many states provide broader protections (e.g., California's "
+            "CFRA, New York's PFL)."
+        ),
+    },
+    {
+        "id": "workers_compensation",
+        "keywords": ["workers compensation", "workplace injury", "occupational", "injury", "disability", "osha"],
+        "text": (
+            "Workers' compensation is a state-mandated no-fault insurance system providing benefits to "
+            "employees injured in the course and scope of employment, regardless of employer negligence. "
+            "Benefits typically include: (1) medical expenses for injury/illness treatment; (2) temporary "
+            "disability payments (commonly 2/3 of average weekly wage); (3) permanent disability benefits "
+            "for lasting impairments; (4) vocational rehabilitation; (5) death benefits to dependents. "
+            "In exchange, employees generally waive the right to sue employers in tort (exclusive remedy "
+            "doctrine). Exceptions exist for intentional employer misconduct. OSHA (29 U.S.C. § 651) "
+            "separately governs workplace safety standards, with penalties up to $16,131 per serious "
+            "violation and $161,323 for willful/repeated violations (2024 adjusted figures). Retaliation "
+            "for filing workers' comp claims or reporting OSHA violations is prohibited under § 11(c)."
+        ),
+    },
 ]
 
 
@@ -137,8 +210,11 @@ def calculate_damages(breach_type: str, contract_value: float) -> str:
 
 TOOLS = [search_legal_database, calculate_damages]
 
-QUESTION = "What are the legal consequences if a company breaches a non-disclosure agreement?"
-
+QUESTION = """WJohn has been working at a company with 75 employees 
+for 13 months. His wife just gave birth to their first child, and he 
+wants to take 10 weeks off to care for his family. The company refuses, claiming 
+he is "not yet eligible," and threatens to terminate him if  he takes the leave. 
+Is the company violating the law? What are John's rights under FMLA?"""
 
 async def main():
     print("=" * 70)
